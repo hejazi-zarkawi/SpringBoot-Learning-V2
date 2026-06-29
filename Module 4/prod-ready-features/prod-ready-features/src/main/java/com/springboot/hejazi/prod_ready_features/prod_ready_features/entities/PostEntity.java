@@ -10,7 +10,7 @@ import lombok.Setter;
 @Table(name = "posts")
 @Getter
 @Setter
-public class PostEntity {
+public class PostEntity extends AuditableBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
