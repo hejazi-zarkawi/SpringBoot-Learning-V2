@@ -4,6 +4,8 @@ import com.hejazi.securityApp.securityApp.dto.PostDTO;
 import com.hejazi.securityApp.securityApp.entities.PostEntity;
 import com.hejazi.securityApp.securityApp.exceptions.ResourceNotFoundException;
 import com.hejazi.securityApp.securityApp.repositories.PostRepository;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -47,4 +49,5 @@ public class PostServiceImpl implements PostService{
         PostEntity updatedPost= postRepository.save(olderPost);
         return modelMapper.map(updatedPost, PostDTO.class);
     }
+
 }

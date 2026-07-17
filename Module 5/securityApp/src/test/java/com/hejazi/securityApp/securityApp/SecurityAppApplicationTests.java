@@ -16,7 +16,7 @@ class SecurityAppApplicationTests {
 	@Test
 	void contextLoads() {
 
-		User user= new User(4L,"hejazi123","1234");
+		User user= new User(4L,"hejazi123","1234", "Hejazi");
 
 		String token= jwtService.generateToken(user);
 
