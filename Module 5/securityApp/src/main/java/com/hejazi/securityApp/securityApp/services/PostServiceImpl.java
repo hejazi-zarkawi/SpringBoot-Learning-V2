@@ -2,12 +2,15 @@ package com.hejazi.securityApp.securityApp.services;
 
 import com.hejazi.securityApp.securityApp.dto.PostDTO;
 import com.hejazi.securityApp.securityApp.entities.PostEntity;
+import com.hejazi.securityApp.securityApp.entities.User;
 import com.hejazi.securityApp.securityApp.exceptions.ResourceNotFoundException;
 import com.hejazi.securityApp.securityApp.repositories.PostRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PostServiceImpl implements PostService{
 
     private final PostRepository postRepository;
@@ -35,6 +39,9 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO getPostById(Long postId) {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        log.info("User {}",user);
         PostEntity post= postRepository
                 .findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post not Found with Id: "+ postId));

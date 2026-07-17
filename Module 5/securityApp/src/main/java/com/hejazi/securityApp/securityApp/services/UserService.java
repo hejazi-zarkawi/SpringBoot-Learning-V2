@@ -42,4 +42,11 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(username)
                 .orElseThrow(()-> new ResourceNotFoundException("User with username"+ username+" not found."));
     }
+
+    public User getUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(()->new ResourceNotFoundException("User with id"+ userId+" not found."));
+
+        return user;
+    }
 }
