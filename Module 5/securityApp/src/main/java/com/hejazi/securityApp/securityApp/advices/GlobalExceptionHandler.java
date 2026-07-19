@@ -1,6 +1,8 @@
 package com.hejazi.securityApp.securityApp.advices;
 
 import com.hejazi.securityApp.securityApp.exceptions.ResourceNotFoundException;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +28,28 @@ public class GlobalExceptionHandler {
 
         ApiError apiError = ApiError.builder()
                 .error("Invalid email or password")
+                .status(HttpStatus.UNAUTHORIZED).build();
+
+        return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ApiError> handleExpiredJWT(
+            ExpiredJwtException exception) {
+
+        ApiError apiError = ApiError.builder()
+                .error("JWT has been expired")
+                .status(HttpStatus.UNAUTHORIZED).build();
+
+        return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiError> handleInvalidJWT(
+            JwtException exception) {
+
+        ApiError apiError = ApiError.builder()
+                .error("JWT is invalid")
                 .status(HttpStatus.UNAUTHORIZED).build();
 
         return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);

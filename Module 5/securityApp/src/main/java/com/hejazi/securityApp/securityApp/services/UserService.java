@@ -40,12 +40,12 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username)
-                .orElseThrow(()-> new ResourceNotFoundException("User with username"+ username+" not found."));
+                .orElseThrow(()-> new BadCredentialsException("User with username "+ username+" not found."));
     }
 
     public User getUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(()->new ResourceNotFoundException("User with id"+ userId+" not found."));
+                .orElseThrow(()->new BadCredentialsException("User with id "+ userId+" not found."));
 
         return user;
     }

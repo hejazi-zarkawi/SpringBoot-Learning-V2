@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 @Component
@@ -25,6 +26,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
     private final UserService userService;
+
+    private final HandlerExceptionResolver handlerExceptionResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -55,16 +58,12 @@ public class JWTAuthFilter extends OncePerRequestFilter {
      catch (
     ExpiredJwtException ex) {
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("JWT token has expired");
-        return;
+        handlerExceptionResolver.resolveException(request,response,null,ex);
 
     } catch (
     JwtException ex) {
 
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.getWriter().write("Invalid JWT token");
-        return;
+            handlerExceptionResolver.resolveException(request,response,null,ex);
     }
 
         filterChain.doFilter(request,response);
