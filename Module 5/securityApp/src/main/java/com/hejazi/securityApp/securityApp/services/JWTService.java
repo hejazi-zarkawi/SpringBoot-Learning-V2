@@ -22,13 +22,22 @@ public class JWTService {
         return Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(User user){
+    public String generateAccessToken(User user){
         return Jwts.builder()
                 .subject(user.getId().toString())
                 .claim("email", user.getEmail())
 //                .claim("roles", Set.of("ADMIN","USER"))
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis()+ 1000*20))
+                .signWith(getSecretKey())
+                .compact();
+    }
+
+    public String generateRefreshToken(User user){
+        return Jwts.builder()
+                .subject(user.getId().toString())
+                .issuedAt(new Date())
+                .expiration(new Date(System.currentTimeMillis()+ 1000L*60*60*24*30*6))
                 .signWith(getSecretKey())
                 .compact();
     }
@@ -42,6 +51,7 @@ public class JWTService {
 
         return Long.valueOf(claim.getSubject());
     }
+
 
 
 }
