@@ -40,6 +40,7 @@ public class AuthController {
     @PostMapping("/login")
     ResponseEntity<LoginResponseDTO> login(@RequestBody LoginDTO loginDTO, HttpServletResponse response){
         LoginResponseDTO loginResponseDTO= authService.login(loginDTO);
+
         Cookie cookie = new Cookie("refreshToken", loginResponseDTO.getRefreshToken());
         cookie.setHttpOnly(true);
         cookie.setSecure("production".equals(deployenv));
@@ -58,6 +59,23 @@ public class AuthController {
         LoginResponseDTO loginResponseDTO= authService.refreshToken(refreshToken);
 
         return ResponseEntity.ok(loginResponseDTO);
+    }
+
+    @PostMapping("/logout")
+    ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response){
+        String refreshToken= Arrays.stream(request.getCookies())
+                .filter(cookie -> "refreshToken".equals(cookie.getName()) )
+                .findFirst()
+                .map(cookie -> cookie.getValue())
+                .orElseThrow(()-> new AuthenticationServiceException("Refresh token not found inside the cookies."));
+
+        authService.logout(refreshToken);
+        Cookie cookie = new Cookie("refreshToken", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure("production".equals(deployenv));
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 
 }
