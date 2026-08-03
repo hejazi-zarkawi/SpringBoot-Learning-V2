@@ -39,9 +39,6 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostDTO getPostById(Long postId) {
-
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("User {}",user);
         PostEntity post= postRepository
                 .findById(postId)
                 .orElseThrow(()-> new ResourceNotFoundException("Post not Found with Id: "+ postId));
