@@ -3,6 +3,8 @@ package com.hejazi.securityApp.securityApp.controllers;
 import com.hejazi.securityApp.securityApp.dto.PostDTO;
 import com.hejazi.securityApp.securityApp.services.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +17,7 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping
+    @Secured("ROLE_USER")
     List<PostDTO> getAllPosts(){
         return postService.getAllPosts();
     }
@@ -25,6 +28,7 @@ public class PostController {
     }
 
     @GetMapping(path = "/{postId}")
+    @PreAuthorize("@postSecurity.isOwnerOfPost(#postId)")
     public PostDTO getPostById(@PathVariable Long postId){
         return postService.getPostById(postId);
     }

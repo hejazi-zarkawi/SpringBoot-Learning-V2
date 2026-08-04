@@ -20,4 +20,7 @@ public class PostEntity extends AuditableBaseEntity {
 
     private String description;
 
+    @ManyToOne
+    private User author;
+
 }

@@ -6,8 +6,11 @@ import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.nio.file.AccessDeniedException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -53,5 +56,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.UNAUTHORIZED).build();
 
         return new ResponseEntity<>(apiError,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<ApiError> handleAccessDeniedException(
+            AuthorizationDeniedException exception) {
+
+        ApiError apiError = ApiError.builder()
+                .error("Access is denied")
+                .status(HttpStatus.FORBIDDEN).build();
+
+        return new ResponseEntity<>(apiError,HttpStatus.FORBIDDEN);
     }
 }
