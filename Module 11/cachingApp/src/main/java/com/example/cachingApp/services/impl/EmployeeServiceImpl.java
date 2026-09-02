@@ -22,7 +22,7 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-//    private final SalaryAccountService salaryAccountService;
+    private final SalaryAccountService salaryAccountService;
     private final ModelMapper modelMapper;
     private final String CACHE_NAME = "employees";
 
@@ -41,7 +41,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
-//    @Transactional
+    @Transactional
     public EmployeeDto createNewEmployee(EmployeeDto employeeDto) {
         log.info("Creating new employee with email: {}", employeeDto.getEmail());
         List<Employee> existingEmployees = employeeRepository.findByEmail(employeeDto.getEmail());
@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee newEmployee = modelMapper.map(employeeDto, Employee.class);
         Employee savedEmployee = employeeRepository.save(newEmployee);
 
-//        salaryAccountService.createAccount(savedEmployee);
+        salaryAccountService.createAccount(savedEmployee);
 
         log.info("Successfully created new employee with id: {}", savedEmployee.getId());
         return modelMapper.map(savedEmployee, EmployeeDto.class);

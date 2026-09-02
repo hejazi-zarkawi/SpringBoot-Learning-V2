@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-//    private final SalaryAccountService salaryAccountService;
+    private final SalaryAccountService salaryAccountService;
 
     @GetMapping("/{id}")
     public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id) {
@@ -41,9 +41,9 @@ public class EmployeeController {
         return ResponseEntity.noContent().build();
     }
 
-//    @PutMapping("/incrementBalance/{accountId}")
-//    public ResponseEntity<SalaryAccount> incrementBalance(@PathVariable Long accountId) {
-//        SalaryAccount salaryAccount = salaryAccountService.incrementBalance(accountId);
-//        return ResponseEntity.ok(salaryAccount);
-//    }
+    @PutMapping("/incrementBalance/{accountId}")
+    public ResponseEntity<SalaryAccount> incrementBalance(@PathVariable Long accountId) {
+        SalaryAccount salaryAccount = salaryAccountService.incrementBalance(accountId);
+        return ResponseEntity.ok(salaryAccount);
+    }
 }
